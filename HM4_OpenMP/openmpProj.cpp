@@ -7,7 +7,7 @@
 #include <vector>
 using namespace std;
 
-// функци€ дл€ случайного расположени€ клада
+// function for the random treasure position
 int random(int a, int b)
 {
 	srand(time(NULL));
@@ -18,11 +18,11 @@ int random(int a, int b)
 int main()
 {
 	cout << "You need to know the size of Treasure Island" << endl;
-	// ввод длины острова
+	// island length input
 	cout << "Enter the length of the Island: ";
 	int length;
 	cin >> length;
-	// ввод ширина острова
+	// island width input
 	cout << "Enter the width of the Island: ";
 	int width;
 	cin >> width;
@@ -30,7 +30,7 @@ int main()
 		cout << "Impossible length or width...";
 		exit(0);
 	}
-	// ввод числа групп
+	// groups number input
 	cout << "Enter number of groups you need for treasure searching: ";
 	int numberOfGroups;
 	cin >> numberOfGroups;
@@ -38,21 +38,21 @@ int main()
 		cout << "Impossible number of groups...";
 		exit(0);
 	}
-	int area = length * width; // считаем площадь острова
+	int area = length * width; // calculating area of the island
 	int g_numCompareWith = random(0, area);
-	vector<int> arr; //создаем вектор дл€ хранени€ всех возможных позиций с кладом
+	vector<int> arr; //vector for all posible treasure positions
 	for (int i = 0; i < area; i++){
-		arr.push_back(i); //заполн€ем эти позиции целыми числами от 0 до максимального индекса (<значение площади - 1>)
+		arr.push_back(i); // put 0 to <area - 1> numbers into this vector
 	}
-	// ”станавливаем желаемое количество потоков
-	// ÷икл будет выполн€тьс€ в g_nNumberOfThreads потоков.
-	// ѕараметры цикла будут автоматически распределены между потоками.
+	// set thread number
+	// cycle executes in <numberOfGroups> threads.
+	// cycle parameters automatically spread between threads.
 #pragma omp parallel num_threads(numberOfGroups)
 	{
 #pragma omp for
 		for (int i = 0; i < area; i++)
 		{
-			//если группа нашла клад, то она сообщает об этом капитану
+			//if group finds a treasure, it will return to the captain and tell him where it is
 			if (arr[i] == g_numCompareWith)
 			{
 				cout << "Group number: " << omp_get_thread_num() << " found the treasure" << "\n";
